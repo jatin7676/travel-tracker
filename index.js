@@ -8,9 +8,23 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-const db = new pg.Client({
-  connectionString: process.env.DATABASE_URL,
-});
+// Use DATABASE_URL if it exists (for Render), otherwise use local config
+const db = new pg.Client(
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false, // Required for Render connections
+        },
+      }
+    : {
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+      }
+);
 
  db.connect();
  
