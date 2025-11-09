@@ -1,3 +1,12 @@
+:root {
+  --bg: #1b1f26;
+  --panel: #232a34;
+  --text: #d3ddef;
+  --muted: #9aa4b2;
+  --primary: #0fb9b1; /* teal */
+  --danger: #ff6b6b;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -11,9 +20,40 @@ body {
   height: 100%;
 }
 body {
-  background: #21252b;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+}
 
-  color: #d3ddef;
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35), transparent 85%);
+  padding: 16px 20px 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.control-form {
+  display: flex;
+  gap: 8px;
 }
 
 .ag-canvas {
@@ -36,6 +76,102 @@ body {
   z-index: -1;
   margin-top: -90px;
 }
+
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 16px;
+  padding: 8px 16px 24px;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 12px 12px 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.visited-panel h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+#visited-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+}
+
+#visited-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  margin: 4px 0;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+}
+
+#visited-list li:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.badge {
+  background: rgba(15,185,177,0.2);
+  color: var(--primary);
+  border: 1px solid rgba(15,185,177,0.35);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.btn {
+  appearance: none;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: var(--primary);
+  color: #0b2c2a;
+  box-shadow: 0 6px 16px rgba(15,185,177,0.35);
+}
+.btn-primary:hover { box-shadow: 0 8px 22px rgba(15,185,177,0.5); }
+
+.btn-danger {
+  background: var(--danger);
+  color: #3f0f0f;
+  box-shadow: 0 6px 16px rgba(255,107,107,0.3);
+}
+.btn-danger:hover { box-shadow: 0 8px 22px rgba(255,107,107,0.45); }
+
+input[type="text"] {
+  font-family: inherit;
+  outline: none;
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.12);
+  width: 260px;
+  border-radius: 10px;
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+input[type="text"]::placeholder { color: var(--muted); }
+
 .ag-canvas_svg {
   display: block;
   width: 100%;
@@ -52,7 +188,10 @@ body {
   transition: 0.5s;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .visited-panel { order: 2; }
+  .map-area { order: 1; }
   .ag-canvas {
     -webkit-flex-flow: row wrap;
     -ms-flex-flow: row wrap;
@@ -78,22 +217,6 @@ input {
   font-size: 14px;
 }
 
-button {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  outline: 0;
-  background: teal;
-  /* float: right;
-  margin-bottom: -100px; */
-  border: 0;
-  padding: 15px;
-  color: #ffffff;
-  font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  cursor: pointer;
-}
-
 .total-count {
   font-family: "Roboto", sans-serif;
   color: white;
@@ -101,4 +224,45 @@ button {
   padding: 15px;
   left: 0;
   bottom: 0;
+}
+
+/* Highlight visited countries and tooltip */
+.ag-canvas_svg path.visited {
+  fill: teal !important;
+  transition: fill 0.3s;
+}
+
+#map-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: none;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+/* Labels drawn on visited countries */
+text.country-label {
+  fill: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #000;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+/* Subtle pulse to draw attention when selecting from list */
+.pulse {
+  animation: pulse 900ms ease-out 1;
+}
+@keyframes pulse {
+  0% { filter: drop-shadow(0 0 0 rgba(15,185,177,0)); }
+  50% { filter: drop-shadow(0 0 12px rgba(15,185,177,0.7)); }
+  100% { filter: drop-shadow(0 0 0 rgba(15,185,177,0)); }
 }

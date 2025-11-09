@@ -6,7 +6,6 @@ CREATE TABLE countries (
     country_name VARCHAR(100) NOT NULL
 );
 
--- Create the 'visited_countries' table to track which countries the user has visited.
 CREATE TABLE visited_countries (
     id SERIAL PRIMARY KEY,
     country_code CHAR(2) NOT NULL UNIQUE,
