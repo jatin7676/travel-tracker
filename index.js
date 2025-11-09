@@ -31,7 +31,7 @@ const db = new pg.Client(
  app.use(bodyParser.urlencoded({ extended: true }));
  app.use(express.static("public"));
  
- async function checkVisisted() {
+ async function checkVisited() {
    const result = await db.query("SELECT country_code FROM visited_countries");
  
    let countries = [];
@@ -43,7 +43,7 @@ const db = new pg.Client(
  
  // GET home page
  app.get("/", async (req, res) => {
-   const countries = await checkVisisted();
+   const countries = await checkVisited();
    res.render("index.ejs", { countries: countries, total: countries.length });
  });
  
@@ -67,7 +67,7 @@ const db = new pg.Client(
       res.redirect("/");
     } catch (err) {
       console.log(err);
-      const countries = await checkVisisted();
+      const countries = await checkVisited();
       res.render("index.ejs", {
         countries: countries,
         total: countries.length,
@@ -76,7 +76,7 @@ const db = new pg.Client(
     }
   } catch (err) {
     console.log(err);
-    const countries = await checkVisisted();
+    const countries = await checkVisited();
     res.render("index.ejs", {
       countries: countries,
       total: countries.length,
